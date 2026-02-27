@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>부안초등학교 | A/S 접수 센터</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #0a0c10;
+            --surface: #111318;
+            --surface-2: #1a1d24;
+            --border: rgba(255,255,255,0.07);
+            --border-focus: rgba(96,165,250,0.5);
+            --accent: #3b82f6;
+            --accent-light: #60a5fa;
+            --accent-glow: rgba(59,130,246,0.15);
+            --text-primary: #f1f5f9;
+            --text-secondary: #64748b;
+            --text-muted: #374151;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 16px;
+            overflow-x: hidden;
+        }
+
+        /* Background grid effect */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Glow blob */
+        body::after {
+            content: '';
+            position: fixed;
+            top: -20%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 480px;
+        }
+
+        /* Header */
+        .header {
+            margin-bottom: 40px;
+            animation: fadeUp 0.6s ease both;
+        }
+
+        .brand-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent-glow);
+            border: 1px solid rgba(59,130,246,0.2);
+            border-radius: 100px;
+            padding: 6px 14px;
+            margin-bottom: 20px;
+        }
+
+        .brand-tag-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s ease infinite;
+        }
+
+        .brand-tag span {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent-light);
+        }
+
+        .header h1 {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 36px;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .header h1 em {
+            font-style: normal;
+            color: var(--accent-light);
+        }
+
+        .header p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        /* Card */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 36px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeUp 0.6s 0.1s ease both;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(96,165,250,0.3), transparent);
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        input, textarea {
+            width: 100%;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 13px 16px;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 14px;
+            color: var(--text-primary);
+            outline: none;
+            transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+            -webkit-appearance: none;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        input:focus, textarea:focus {
+            border-color: rgba(96,165,250,0.4);
+            background: rgba(26, 29, 36, 0.8);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        textarea {
+            resize: none;
+            line-height: 1.6;
+        }
+
+        .school-select {
+            width: 100%;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 13px 16px;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 14px;
+            color: var(--text-primary);
+            outline: none;
+            transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+            -webkit-appearance: none;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .school-select:focus {
+            border-color: rgba(96,165,250,0.4);
+            background: rgba(26, 29, 36, 0.8);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .school-select option {
+            background: #1a1d24;
+            color: var(--text-primary);
+        }
+
+        /* Divider */
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 24px 0;
+        }
+
+        /* Consent */
+        .consent-box {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: rgba(59,130,246,0.05);
+            border: 1px solid rgba(59,130,246,0.12);
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 24px;
+            cursor: pointer;
+        }
+
+        .consent-box:hover {
+            border-color: rgba(59,130,246,0.25);
+        }
+
+        .custom-checkbox {
+            width: 18px;
+            height: 18px;
+            min-width: 18px;
+            border: 1.5px solid var(--text-muted);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        #agree:checked + .consent-label .custom-checkbox,
+        .custom-checkbox.checked {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .custom-checkbox svg {
+            opacity: 0;
+            transition: opacity 0.15s;
+        }
+
+        .custom-checkbox.checked svg {
+            opacity: 1;
+        }
+
+        #agree { display: none; }
+
+        .consent-text {
+            font-size: 11.5px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .consent-text strong {
+            color: var(--accent-light);
+        }
+
+        /* Submit button */
+        .submit-btn {
+            width: 100%;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 60%);
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(59,130,246,0.35);
+        }
+
+        .submit-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .submit-btn .arrow {
+            transition: transform 0.2s;
+        }
+
+        .submit-btn:hover .arrow {
+            transform: translateX(3px);
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 32px;
+            text-align: center;
+            animation: fadeUp 0.6s 0.2s ease both;
+        }
+
+        .footer-brand {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .footer-brand span {
+            color: var(--accent-light);
+        }
+
+        .footer-copy {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 6px;
+            line-height: 1.7;
+        }
+
+        /* Step indicator */
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 24px;
+        }
+
+        .step-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--text-muted);
+        }
+
+        .step-dot.active {
+            width: 20px;
+            border-radius: 3px;
+            background: var(--accent);
+        }
+
+        /* Animations */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+
+        /* Success state */
+        .success-overlay {
+            display: none;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .success-overlay.show { display: block; }
+
+        .success-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(34,197,94,0.1);
+            border: 1px solid rgba(34,197,94,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+
+        @media (max-width: 480px) {
+            .card { padding: 24px 20px; }
+            .header h1 { font-size: 28px; }
+            .form-row { grid-template-columns: 1fr; gap: 0; }
+            .form-row .form-group { margin-bottom: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="brand-tag">
+                <div class="brand-tag-dot"></div>
+                <span>BLUETECH 정보통신</span>
+            </div>
+            <h1>부안초등학교<br><em>A/S 접수</em></h1>
+            <p>정확한 증상 기입 시, 부품을 사전 준비하여<br>더욱 빠른 복구가 가능합니다.</p>
+        </div>
+
+        <div class="card">
+            <!-- Step dots -->
+            <div class="step-indicator">
+                <div class="step-dot active"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+            </div>
+
+            <form id="asForm">
+                <input type="hidden" name="targetSheet" value="부안초등학교">
+                <input type="hidden" name="company" value="부안초등학교">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>신청자 성함</label>
+                        <input type="text" name="name" placeholder="홍길동" required>
+                    </div>
+                    <div class="form-group">
+                        <label>연락처</label>
+                        <input type="tel" name="phone" placeholder="010-0000-0000" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>장소</label>
+                    <input type="text" name="location" placeholder="예: 3층 과학실" required>
+                </div>
+
+                <div class="form-group">
+                    <label>요청 상세내용</label>
+                    <textarea name="request" rows="4" placeholder="증상을 자세히 적어주시면 수리 부품 준비에 도움이 됩니다." required></textarea>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="consent-box" id="consentBox">
+                    <div class="custom-checkbox" id="checkboxUI">
+                        <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                            <path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <input type="checkbox" id="agree" name="agree" required>
+                    <p class="consent-text">
+                        <strong>(필수)</strong> 수집된 개인정보(이름, 연락처)는 A/S 처리 목적으로만 사용되며, 완료 시 안전하게 파기됩니다. 이에 동의합니다.
+                    </p>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <span id="btnText">접수 신청하기</span>
+                    <svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </button>
+            </form>
+        </div>
+
+        <div class="footer">
+            <div class="footer-brand">BLUE<span>TECH</span> · Information & Communication</div>
+            <p class="footer-copy">© 2026 블루텍 정보통신. All Rights Reserved.<br>본 페이지는 보안 전송이 적용된 공식 A/S 접수처입니다.</p>
+        </div>
+
+    <!-- 접수 완료 모달 -->
+    <div id="successModal" style="display:none; position:fixed; inset:0; z-index:9999; align-items:center; justify-content:center; padding:16px;">
+        <!-- 배경 오버레이 -->
+        <div id="modalOverlay" style="position:absolute; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px);"></div>
+        <!-- 모달 박스 -->
+        <div style="position:relative; background:#111318; border:1px solid rgba(96,165,250,0.25); border-radius:24px; padding:40px 32px; max-width:360px; width:100%; text-align:center; box-shadow:0 25px 60px rgba(0,0,0,0.5); animation:modalPop 0.35s cubic-bezier(0.34,1.56,0.64,1) both;">
+            <!-- 체크 아이콘 -->
+            <div style="width:72px; height:72px; background:rgba(34,197,94,0.1); border:1.5px solid rgba(34,197,94,0.35); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 20px;">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 6L9 17l-5-5"/>
+                </svg>
+            </div>
+            <!-- 제목 -->
+            <h3 style="font-family:'DM Sans',sans-serif; font-size:22px; font-weight:700; color:#f1f5f9; margin-bottom:12px; letter-spacing:-0.02em;">접수 완료!</h3>
+            <!-- 내용 -->
+            <p style="font-size:14px; color:#94a3b8; line-height:1.7; margin-bottom:28px;">
+                접수가 완료되었습니다!<br>
+                담당기사가 확인 후 빠른 시간내로<br>연락드리겠습니다.
+            </p>
+            <!-- 닫기 버튼 -->
+            <button id="modalCloseBtn" style="width:100%; background:#3b82f6; color:#fff; border:none; border-radius:12px; padding:14px; font-family:'DM Sans',sans-serif; font-size:15px; font-weight:600; cursor:pointer; transition:background 0.2s, transform 0.2s;"
+                onmouseover="this.style.background='#2563eb'; this.style.transform='translateY(-2px)'"
+                onmouseout="this.style.background='#3b82f6'; this.style.transform='translateY(0)'">
+                확인했습니다 ✓
+            </button>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbzqC6Num7CmmKDngJnQsh-gOb-624xrpcmWWsYLP4IouA6w4c2OsDDrV-1LEpd3n3eTvQ/exec';
+        const form = document.getElementById('asForm');
+        const btn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const checkboxUI = document.getElementById('checkboxUI');
+        const agreeInput = document.getElementById('agree');
+
+        // Custom checkbox toggle
+        document.getElementById('consentBox').addEventListener('click', () => {
+            agreeInput.checked = !agreeInput.checked;
+            checkboxUI.classList.toggle('checked', agreeInput.checked);
+        });
+
+        // Phone auto-formatting
+        form.querySelector('[name="phone"]').addEventListener('input', function() {
+            let v = this.value.replace(/\D/g, '');
+            if (v.length <= 3) this.value = v;
+            else if (v.length <= 7) this.value = v.slice(0,3) + '-' + v.slice(3);
+            else this.value = v.slice(0,3) + '-' + v.slice(3,7) + '-' + v.slice(7,11);
+        });
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+
+            if (!agreeInput.checked) {
+                shakeElement(document.getElementById('consentBox'));
+                return;
+            }
+
+            const formData = new FormData(form);
+            const required = ['name', 'phone', 'location', 'request'];
+            let allFilled = true;
+            for (const key of required) {
+                const val = formData.get(key);
+                if (!val || !val.trim()) { allFilled = false; break; }
+            }
+
+            if (!allFilled) {
+                alert('⚠️ 모든 항목을 빠짐없이 입력해주세요.');
+                return;
+            }
+
+            // Loading state
+            btn.disabled = true;
+            btnText.textContent = '전송 중...';
+            btn.querySelector('.arrow').style.display = 'none';
+            const spinner = document.createElement('div');
+            spinner.className = 'spinner';
+            btn.appendChild(spinner);
+
+            // Google Apps Script는 CORS 정책으로 응답을 읽을 수 없으므로
+            // no-cors 모드로 전송 후 무조건 성공 처리
+            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: new URLSearchParams(formData) })
+                .then(() => {
+                    showSuccess();
+                })
+                .catch(() => {
+                    alert('❌ 네트워크 오류가 발생했습니다. 인터넷 연결을 확인해주세요.');
+                    resetBtn();
+                });
+        });
+
+        function showSuccess() {
+            resetBtn();
+            // 모달 표시
+            const modal = document.getElementById('successModal');
+            modal.style.display = 'flex';
+            // 폼 초기화
+            form.reset();
+            checkboxUI.classList.remove('checked');
+        }
+
+        // 모달 닫기
+        document.getElementById('modalCloseBtn').addEventListener('click', () => {
+            document.getElementById('successModal').style.display = 'none';
+        });
+
+        function resetBtn() {
+            btn.disabled = false;
+            btn.querySelector('.spinner')?.remove();
+            btnText.textContent = '접수 신청하기';
+            btn.querySelector('.arrow').style.display = '';
+        }
+
+        function shakeElement(el) {
+            el.style.animation = 'none';
+            el.style.borderColor = 'rgba(239,68,68,0.5)';
+            el.offsetHeight;
+            el.style.animation = 'shake 0.4s ease';
+            setTimeout(() => {
+                el.style.borderColor = '';
+                el.style.animation = '';
+            }, 400);
+        }
+
+        // Add shake animation
+        const style = document.createElement('style');
+        style.textContent = `@keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 40%{transform:translateX(6px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(4px)} }`;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
